@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Violette — Hair Studio</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+	<style>
+		:root {
+			--bg: #120a1f;
+			--bg-raised: #1b1030;
+			--surface: rgba(255, 255, 255, 0.04);
+			--border: rgba(216, 190, 255, 0.14);
+			--text: #f3ecff;
+			--muted: #a899c4;
+			--accent: #b78cff;
+			--accent-strong: #8b4dff;
+			--accent-soft: #e4d3ff;
+			--glow: rgba(139, 77, 255, 0.45);
+
+			--font-display: "Fraunces", Georgia, serif;
+			--font-body: "Manrope", system-ui, sans-serif;
+
+			--radius-card: 24px;
+			--radius-pill: 999px;
+			--gutter: clamp(20px, 5vw, 72px);
+			--section: clamp(80px, 12vw, 160px);
+			--ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+		}
+
+		*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+		html { scroll-behavior: smooth; }
+
+		body {
+			background: var(--bg);
+			color: var(--text);
+			font-family: var(--font-body);
+			line-height: 1.6;
+			overflow-x: hidden;
+			-webkit-font-smoothing: antialiased;
+		}
+
+		body::before {
+			content: "";
+			position: fixed;
+			inset: 0;
+			z-index: -1;
+			background:
+				radial-gradient(60vw 60vw at 85% -10%, var(--glow), transparent 60%),
+				radial-gradient(50vw 50vw at -10% 60%, rgba(183, 140, 255, 0.18), transparent 60%);
+			animation: drift 18s ease-in-out infinite alternate;
+		}
+
+		@keyframes drift { to { transform: translate3d(-3%, 4%, 0) scale(1.08); } }
+
+		a { color: inherit; text-decoration: none; }
+
+		h1, h2, h3 { font-family: var(--font-display); font-weight: 300; line-height: 1.02; letter-spacing: -0.02em; }
+		h1 { font-size: clamp(3.2rem, 11vw, 9.5rem); }
+		h2 { font-size: clamp(2.2rem, 5.5vw, 4.5rem); }
+		em { font-style: italic; color: var(--accent); }
+
+		.eyebrow {
+			font-size: 0.75rem;
+			letter-spacing: 0.22em;
+			text-transform: uppercase;
+			color: var(--accent);
+		}
+
+		/* Nav */
+		nav {
+			position: fixed;
+			top: 16px;
+			left: 50%;
+			transform: translateX(-50%);
+			z-index: 10;
+			width: min(1100px, calc(100% - 32px));
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: 10px 10px 10px 24px;
+			border: 1px solid var(--border);
+			border-radius: var(--radius-pill);
+			background: rgba(18, 10, 31, 0.6);
+			backdrop-filter: blur(18px);
+			-webkit-backdrop-filter: blur(18px);
+		}
+
+		.logo { font-family: var(--font-display); font-size: 1.35rem; font-style: italic; }
+		.nav-links { display: flex; gap: 32px; font-size: 0.9rem; color: var(--muted); }
+		.nav-links a { transition: color 0.3s var(--ease); }
+		.nav-links a:hover { color: var(--text); }
+
+		.btn {
+			display: inline-flex;
+			align-items: center;
+			gap: 10px;
+			padding: 14px 26px;
+			border-radius: var(--radius-pill);
+			background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+			color: #14082a;
+			font-weight: 600;
+			font-size: 0.92rem;
+			transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
+		}
+		.btn:hover { transform: translateY(-2px); box-shadow: 0 14px 40px -10px var(--glow); }
+		.btn.ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
+		.btn.ghost:hover { border-color: var(--accent); box-shadow: none; }
+		nav .btn { padding: 11px 22px; }
+
+		/* Hero */
+		.hero {
+			min-height: 100svh;
+			display: grid;
+			align-content: end;
+			padding: 140px var(--gutter) clamp(40px, 6vw, 80px);
+			position: relative;
+		}
+
+		.hero h1 span { display: block; }
+		.hero h1 span:nth-child(2) { padding-left: clamp(0px, 12vw, 200px); }
+
+		.hero-foot {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-between;
+			align-items: end;
+			gap: 32px;
+			margin-top: clamp(32px, 5vw, 64px);
+			padding-top: 28px;
+			border-top: 1px solid var(--border);
+		}
+		.hero-foot p { max-width: 420px; color: var(--muted); }
+		.hero-cta { display: flex; flex-wrap: wrap; gap: 12px; }
+
+		.orb {
+			position: absolute;
+			top: 16%;
+			right: var(--gutter);
+			width: clamp(160px, 24vw, 340px);
+			aspect-ratio: 3 / 4;
+			border-radius: 200px;
+			background:
+				radial-gradient(circle at 30% 20%, var(--accent-soft), transparent 45%),
+				linear-gradient(160deg, var(--accent), var(--accent-strong) 55%, #2a1157);
+			box-shadow: 0 40px 120px -20px var(--glow), inset 0 0 60px rgba(255, 255, 255, 0.15);
+			animation: float 9s ease-in-out infinite;
+		}
+		@keyframes float { 50% { transform: translateY(-18px) rotate(3deg); } }
+
+		/* Marquee */
+		.marquee {
+			overflow: hidden;
+			border-block: 1px solid var(--border);
+			padding: 22px 0;
+			white-space: nowrap;
+		}
+		.marquee div {
+			display: inline-block;
+			font-family: var(--font-display);
+			font-style: italic;
+			font-size: clamp(1.4rem, 3vw, 2.2rem);
+			color: var(--accent-soft);
+			animation: slide 28s linear infinite;
+		}
+		.marquee span { margin: 0 28px; color: var(--accent-strong); }
+		@keyframes slide { to { transform: translateX(-50%); } }
+
+		/* Sections */
+		section { padding: var(--section) var(--gutter); }
+		.section-head {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-between;
+			align-items: end;
+			gap: 24px;
+			margin-bottom: clamp(40px, 6vw, 80px);
+		}
+		.section-head p { max-width: 380px; color: var(--muted); }
+
+		/* Services */
+		.services { list-style: none; }
+		.services li {
+			display: grid;
+			grid-template-columns: 60px 1fr auto;
+			gap: 24px;
+			align-items: baseline;
+			padding: 30px 0;
+			border-top: 1px solid var(--border);
+			transition: padding 0.5s var(--ease), color 0.5s var(--ease);
+		}
+		.services li:last-child { border-bottom: 1px solid var(--border); }
+		.services li:hover { padding-left: 20px; color: var(--accent); }
+		.services .num { font-size: 0.8rem; color: var(--muted); }
+		.services h3 { font-size: clamp(1.5rem, 3.4vw, 2.6rem); }
+		.services small { display: block; margin-top: 6px; font-family: var(--font-body); font-size: 0.92rem; color: var(--muted); letter-spacing: 0; }
+		.services .price { font-family: var(--font-display); font-size: 1.3rem; white-space: nowrap; }
+
+		/* Experience */
+		.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+		.card {
+			padding: 36px;
+			min-height: 280px;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			border: 1px solid var(--border);
+			border-radius: var(--radius-card);
+			background: var(--surface);
+			backdrop-filter: blur(12px);
+			-webkit-backdrop-filter: blur(12px);
+			transition: transform 0.5s var(--ease), border-color 0.5s var(--ease), background 0.5s var(--ease);
+		}
+		.card:hover { transform: translateY(-6px); border-color: var(--accent); background: rgba(183, 140, 255, 0.08); }
+		.card .big { font-family: var(--font-display); font-size: 3.4rem; font-weight: 300; color: var(--accent); }
+		.card h3 { font-size: 1.5rem; margin-bottom: 10px; }
+		.card p { color: var(--muted); font-size: 0.95rem; }
+
+		/* Quote */
+		.quote { text-align: center; }
+		.quote blockquote {
+			font-family: var(--font-display);
+			font-weight: 300;
+			font-size: clamp(1.6rem, 4vw, 3.2rem);
+			line-height: 1.2;
+			max-width: 1000px;
+			margin: 24px auto;
+		}
+		.quote cite { color: var(--muted); font-style: normal; font-size: 0.9rem; }
+
+		/* Booking */
+		.book {
+			margin: 0 var(--gutter) var(--section);
+			padding: clamp(40px, 7vw, 96px);
+			border-radius: calc(var(--radius-card) * 1.6);
+			background: linear-gradient(140deg, var(--accent-strong), #3d1a85 60%, var(--bg-raised));
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+			gap: 48px;
+			align-items: end;
+			position: relative;
+			overflow: hidden;
+		}
+		.book::after {
+			content: "";
+			position: absolute;
+			width: 420px;
+			height: 420px;
+			right: -120px;
+			top: -160px;
+			border-radius: 50%;
+			background: radial-gradient(circle, rgba(255, 255, 255, 0.25), transparent 65%);
+		}
+		.book .eyebrow { color: var(--accent-soft); }
+		.book h2 { margin: 16px 0 28px; }
+		.book .btn { background: var(--text); }
+		.hours { list-style: none; position: relative; z-index: 1; }
+		.hours li { display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.2); }
+		.hours li span:last-child { color: var(--accent-soft); }
+
+		footer {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-between;
+			gap: 16px;
+			padding: 32px var(--gutter);
+			border-top: 1px solid var(--border);
+			color: var(--muted);
+			font-size: 0.85rem;
+		}
+
+		/* Load + scroll reveals */
+		.rise { opacity: 0; transform: translateY(40px); animation: rise 1.1s var(--ease) forwards; }
+		.rise:nth-child(2) { animation-delay: 0.12s; }
+		.d1 { animation-delay: 0.3s; }
+		.d2 { animation-delay: 0.5s; }
+		@keyframes rise { to { opacity: 1; transform: none; } }
+
+		@supports (animation-timeline: view()) {
+			.reveal {
+				animation: rise linear both;
+				animation-timeline: view();
+				animation-range: entry 0% entry 45%;
+			}
+		}
+
+		@media (max-width: 720px) {
+			.nav-links { display: none; }
+			.orb { opacity: 0.55; top: 12%; }
+			.services li { grid-template-columns: 1fr auto; }
+			.services .num { display: none; }
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			*, *::before, *::after { animation: none !important; transition: none !important; }
+			.rise { opacity: 1; transform: none; }
+		}
+	</style>
+</head>
+<body>
+
+	<nav>
+		<a href="#" class="logo">Violette</a>
+		<div class="nav-links">
+			<a href="#services">Services</a>
+			<a href="#experience">Experience</a>
+			<a href="#book">Hours</a>
+		</div>
+		<a href="#book" class="btn">Book now</a>
+	</nav>
+
+	<header class="hero">
+		<div class="orb"></div>
+		<p class="eyebrow rise">Hair studio · Cut · Colour · Care</p>
+		<h1>
+			<span class="rise">Hair, but</span>
+			<span class="rise"><em>make it art.</em></span>
+		</h1>
+		<div class="hero-foot rise d1">
+			<p>A calm, modern studio where every cut starts with a conversation and ends with hair that actually feels like you.</p>
+			<div class="hero-cta">
+				<a href="#book" class="btn">Book an appointment →</a>
+				<a href="#services" class="btn ghost">See services</a>
+			</div>
+		</div>
+	</header>
+
+	<div class="marquee" aria-hidden="true">
+		<div>
+			Precision cuts <span>✦</span> Balayage <span>✦</span> Gloss &amp; tone <span>✦</span> Scalp rituals <span>✦</span> Bridal styling <span>✦</span> Keratin care <span>✦</span>
+			Precision cuts <span>✦</span> Balayage <span>✦</span> Gloss &amp; tone <span>✦</span> Scalp rituals <span>✦</span> Bridal styling <span>✦</span> Keratin care <span>✦</span>
+		</div>
+	</div>
+
+	<section id="services">
+		<div class="section-head reveal">
+			<div>
+				<p class="eyebrow">Services</p>
+				<h2>The <em>menu.</em></h2>
+			</div>
+			<p>Every service includes a consultation, a wash ritual and styling. No rush, no upsell.</p>
+		</div>
+		<ul class="services">
+			<li class="reveal"><span class="num">01</span><h3>Signature Cut<small>Consultation, precision cut, wash and finish</small></h3><span class="price">from $65</span></li>
+			<li class="reveal"><span class="num">02</span><h3>Colour &amp; Balayage<small>Hand-painted, lived-in colour tailored to your tone</small></h3><span class="price">from $140</span></li>
+			<li class="reveal"><span class="num">03</span><h3>Gloss &amp; Tone<small>Shine refresh between colour appointments</small></h3><span class="price">from $55</span></li>
+			<li class="reveal"><span class="num">04</span><h3>Scalp Ritual<small>Exfoliation, massage and deep treatment</small></h3><span class="price">from $45</span></li>
+			<li class="reveal"><span class="num">05</span><h3>Occasion Styling<small>Bridal, editorial and event hair</small></h3><span class="price">from $90</span></li>
+		</ul>
+	</section>
+
+	<section id="experience">
+		<div class="section-head reveal">
+			<div>
+				<p class="eyebrow">Experience</p>
+				<h2>Slow hair, <em>done right.</em></h2>
+			</div>
+			<p>Fewer chairs, longer appointments, better results.</p>
+		</div>
+		<div class="cards">
+			<article class="card reveal">
+				<span class="big">60′</span>
+				<div><h3>Unhurried time</h3><p>Minimum one hour per guest. Your stylist is never double-booked.</p></div>
+			</article>
+			<article class="card reveal">
+				<span class="big">100%</span>
+				<div><h3>Clean products</h3><p>Vegan, cruelty-free colour and care that is kind to hair and scalp.</p></div>
+			</article>
+			<article class="card reveal">
+				<span class="big">1:1</span>
+				<div><h3>One stylist, start to finish</h3><p>The person you talk to is the person who cuts, colours and styles.</p></div>
+			</article>
+		</div>
+	</section>
+
+	<section class="quote reveal">
+		<p class="eyebrow">Kind words</p>
+		<blockquote>“First time I've left a salon with exactly the hair I <em>described</em> — not the hair they wanted to give me.”</blockquote>
+		<cite>— A very happy guest</cite>
+	</section>
+
+	<div class="book reveal" id="book">
+		<div>
+			<p class="eyebrow">Book</p>
+			<h2>Your chair is <em style="color: var(--accent-soft)">waiting.</em></h2>
+			<a href="mailto:hello@example.com" class="btn">hello@example.com →</a>
+		</div>
+		<ul class="hours">
+			<li><span>Monday – Friday</span><span>09 – 18</span></li>
+			<li><span>Saturday</span><span>10 – 15</span></li>
+			<li><span>Sunday</span><span>Closed</span></li>
+		</ul>
+	</div>
+
+	<footer>
+		<span>© 2026 Violette Hair Studio</span>
+		<span>Placeholder Street 1 · Your City</span>
+	</footer>
+
+</body>
+</html>
